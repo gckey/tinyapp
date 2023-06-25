@@ -23,6 +23,10 @@ app.get("/urls", (req, res) => {
   res.render("urls_index", templateVars); //to pass the url data to template
 });
 
+app.get("/urls/new", (req, res) => {
+  res.render("urls_new");
+});
+
 app.get("/urls/:shortURL", (req, res) => {
   //retrieve the value, create an obj with template variables
   const templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL] };
