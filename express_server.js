@@ -36,6 +36,8 @@ app.get("/urls", (req, res) => {
 
 app.post("/urls", (req, res) => {
   console.log(req.body); // Log the POST request body to the console
+  urlDatabase[generateRandomString()] = req.body.longURL;
+  console.log("New urlDatabase: ", urlDatabase);
   res.send("Ok"); // Respond with 'Ok'
 });
 
@@ -47,6 +49,11 @@ app.get("/urls/:shortURL", (req, res) => {
   //retrieve the value, create an obj with template variables
   const templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL] };
   res.render("urls_show", templateVars);
+});
+//route to handle shortURL requests and will redirect to its longURL
+app.get("/u/:shortURL", (req, res) => {
+  const longURL = urlDatabase[req.params.shortURL];
+  res.redirect(longURL);
 });
 
 app.get("/urls.json", (req, res) => {
