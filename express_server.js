@@ -3,6 +3,7 @@ const app = express();
 const PORT = 8080; // default port 8080
 
 app.set("view engine", "ejs"); // Import the ejs library
+app.use(express.urlencoded({ extended: true })); //middleware to parse the body of POST requests
 
 const urlDatabase = {
   "b2xVn2": "http://www.lighthouselabs.ca",
