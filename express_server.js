@@ -3,7 +3,17 @@ const app = express();
 const PORT = 8080; // default port 8080
 
 app.set("view engine", "ejs"); // Import the ejs library
-app.use(express.urlencoded({ extended: true })); //middleware to parse the body of POST requests
+app.use(express.urlencoded({ extended: true })); //Express middleware to parse the body of POST requests
+
+function generateRandomString() {
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  let randomString = '';
+  for (let i = 0; i < 6; i++) {
+    const randomIndex = Math.floor(Math.random() * characters.length);
+    randomString += characters[randomIndex];
+  }
+  return randomString;
+}
 
 const urlDatabase = {
   "b2xVn2": "http://www.lighthouselabs.ca",
@@ -22,6 +32,11 @@ app.get("/urls", (req, res) => {
   //to keep track of all the URLs and their shortened forms
   const templateVars = { urls: urlDatabase };
   res.render("urls_index", templateVars); //to pass the url data to template
+});
+
+app.post("/urls", (req, res) => {
+  console.log(req.body); // Log the POST request body to the console
+  res.send("Ok"); // Respond with 'Ok'
 });
 
 app.get("/urls/new", (req, res) => {
