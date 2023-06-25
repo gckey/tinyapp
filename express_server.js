@@ -36,9 +36,11 @@ app.get("/urls", (req, res) => {
 
 app.post("/urls", (req, res) => {
   console.log(req.body); // Log the POST request body to the console
-  urlDatabase[generateRandomString()] = req.body.longURL;
+  const shortURL = generateRandomString();
+  urlDatabase[shortURL] = req.body.longURL;
+  //saves the updated urlDatabase and then redirects to shortURL
   console.log("New urlDatabase: ", urlDatabase);
-  res.send("Ok"); // Respond with 'Ok'
+  res.redirect(`urls/${shortURL}`);
 });
 
 app.get("/urls/new", (req, res) => {
@@ -53,6 +55,9 @@ app.get("/urls/:shortURL", (req, res) => {
 //route to handle shortURL requests and will redirect to its longURL
 app.get("/u/:shortURL", (req, res) => {
   const longURL = urlDatabase[req.params.shortURL];
+  if (!urlDatabase[req.params.shortURL]) {
+    return res.status(404).send("Error! The requested Page Not Found");
+  }
   res.redirect(longURL);
 });
 
