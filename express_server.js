@@ -5,7 +5,7 @@ const PORT = 8080; // default port 8080
 app.set("view engine", "ejs"); // Import the ejs library
 app.use(express.urlencoded({ extended: true })); //Express middleware to parse the body of POST requests
 
-function generateRandomString() {
+const generateRandomString = () => {
   const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
   let randomString = '';
   for (let i = 0; i < 6; i++) {
@@ -13,7 +13,7 @@ function generateRandomString() {
     randomString += characters[randomIndex];
   }
   return randomString;
-}
+};
 
 const urlDatabase = {
   "b2xVn2": "http://www.lighthouselabs.ca",
@@ -34,6 +34,13 @@ app.get("/urls", (req, res) => {
   res.render("urls_index", templateVars); //to pass the url data to template
 });
 
+//the login route
+app.post('/login', (req, res) => {
+  const loginUsername = req.body.username;
+  res.cookie('username', loginUsername);
+  res.redirect('/urls');
+});
+
 app.post("/urls", (req, res) => {
   console.log(req.body); // Log the POST request body to the console
   const shortURL = generateRandomString();
@@ -49,7 +56,10 @@ app.get("/urls/new", (req, res) => {
 
 app.get("/urls/:shortURL", (req, res) => {
   //retrieve the value, create an obj with template variables
-  const templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL] };
+  const templateVars = {
+    shortURL: req.params.shortURL,
+    longURL: urlDatabase[req.params.shortURL]
+  };
   res.render("urls_show", templateVars);
 });
 //route to handle shortURL requests and will redirect to its longURL
