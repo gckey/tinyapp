@@ -43,6 +43,13 @@ app.post('/login', (req, res) => {
   res.redirect('/urls');
 });
 
+// log out route
+app.post('/logout', (req, res) => {
+  const loginUsername = req.body.username;
+  res.clearCookie('username', loginUsername);
+  res.redirect('/urls'); //redirect browser back to /urls page
+});
+
 app.post("/urls", (req, res) => {
   console.log(req.body); // Log the POST request body to the console
   const shortURL = generateRandomString();
