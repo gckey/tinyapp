@@ -36,6 +36,12 @@ app.get("/urls", (req, res) => {
   res.render("urls_index", templateVars); //to pass the url data to template
 });
 
+// registration route handler
+app.get("/register", (req, res) => {
+  const templateVars = { username: req.cookies["username"] };
+  res.render("urls_register", templateVars);
+});
+
 //the login route
 app.post('/login', (req, res) => {
   const loginUsername = req.body.username;
