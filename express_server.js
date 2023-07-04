@@ -16,6 +16,17 @@ const generateRandomString = () => {
   }
   return randomString;
 };
+//checks if a user with a specific email exists in the users object
+const userExist = (userEmail) => {
+  for (const userID in users) {
+    const user = users[userID];
+    // checks if the email property (user.email) of the current user object matches the userEmail
+    if (user.email === userEmail) {
+      return true;
+    }
+  }
+  return false;
+};
 
 const urlDatabase = {
   "b2xVn2": "http://www.lighthouselabs.ca",
@@ -63,15 +74,22 @@ app.post("/register", (req, res) => {
   //Extract the email and password from the request body
   const userEmail = req.body.email;
   const userPwd = req.body.password;
+  //check if either the email or the password is an empty string
+  if (userEmail === "" || userPwd === "") {
+    res.status(400).send("Please enter a valid email and/or password");
+  } else if (userExist(userEmail)) { //If the email exists in the users object
+    res.status(400).send("This email is already registered.");
+  } else {
   //Create a new user object and store it in the users object
-  users[userID] = {
-    id: userID,
-    email: userEmail,
-    password: userPwd,
-  };
-  //Set the user_id cookie with the new user's ID
-  res.cookie("user_id", userID);
-  res.redirect("/urls");
+    users[userID] = {
+      id: userID,
+      email: userEmail,
+      password: userPwd,
+    };
+    //Set the user_id cookie with the new user's ID
+    res.cookie("user_id", userID);
+    res.redirect("/urls");
+  }
 });
 
 //the login route
