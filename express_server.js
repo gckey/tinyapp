@@ -1,10 +1,14 @@
-const express = require("express"); // Import the express library
+const express = require("express"); //Import the express library
+const morgan = require("morgan"); //To tell wht routes are being pinged, useful for debugging
 const app = express();
+const cookieParser = require("cookie-parser"); //Import cookie-parser
 const PORT = 8080; // default port 8080
 
-app.set("view engine", "ejs"); // Import the ejs library
-app.use(express.urlencoded({ extended: true })); //Express middleware to parse the body of POST requests
-const cookieParser = require("cookie-parser"); //Import cookie-parser
+app.set("view engine", "ejs"); // Import the ejs library, allow to use embeded javascript
+
+//Middleware
+app.use(express.urlencoded({ extended: true })); //allows to encode req body
+app.use(morgan("dev"));
 app.use(cookieParser()); //Initialize cookie-parser
 
 const generateRandomString = () => {
@@ -90,6 +94,15 @@ app.post("/register", (req, res) => {
     res.cookie("user_id", userID);
     res.redirect("/urls");
   }
+});
+
+app.get('/login', (req, res) => {
+  const userObj = users[req.cookies.user_id];
+  const templateVars = {
+    urls: urlDatabase,
+    user: userObj
+  };
+  res.render('urls_login', templateVars);
 });
 
 //the login route
