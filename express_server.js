@@ -6,7 +6,7 @@ const PORT = 8080; // default port 8080
 
 app.set("view engine", "ejs"); // Import the ejs library, allow to use embeded javascript
 
-//Middleware
+//Middlewares
 app.use(express.urlencoded({ extended: true })); //allows to encode req body
 app.use(morgan("dev"));
 app.use(cookieParser()); //Initialize cookie-parser
@@ -30,6 +30,16 @@ const userExist = (userEmail) => {
     }
   }
   return false;
+};
+
+//Function to retrieve the user ID associated with a given email from a database object.
+const getEmail = (email, database) => {
+  for (const user in database) {
+    if (database[user].email === email) {
+      return user;
+    }
+  }
+  return null;
 };
 
 const urlDatabase = {
@@ -83,6 +93,7 @@ app.post("/register", (req, res) => {
     res.status(400).send("Please enter a valid email and/or password");
   } else if (userExist(userEmail)) { //If the email exists in the users object
     res.status(400).send("This email is already registered.");
+    return res.redirect('/register');
   } else {
   //Create a new user object and store it in the users object
     users[userID] = {
@@ -107,17 +118,22 @@ app.get('/login', (req, res) => {
 
 //the login route
 app.post("/login", (req, res) => {
-  if (users.email === req.body.email && users.password === req.body.password) {
-    res.cookie('user_id', users.id);
-    res.redirect('/urls');
+  const userEmail = req.body.email;
+  const userPwd = req.body.password;
+  const userID = getEmail(userEmail, users);
+  if (!userID) {
+    res.status(403).send('Error 403: Sorry, the email you entered is invalid. Please try again.');
+  } else if (userPwd !== users[userID].password) {
+    res.status(403).send('Error 403: Sorry, the password you entered is invalid. Please try again.');
   }
-  res.status(403).send('The email and/or password you entered is not correct or cannot be found. Please try again.');
+  res.cookie('user_id', userID);
+  res.redirect('/urls');
 });
 
 // log out route
 app.post('/logout', (req, res) => {
   res.clearCookie('user_id');
-  res.redirect('/urls');
+  res.redirect('/login');
 });
 
 app.get("/urls/new", (req, res) => {
