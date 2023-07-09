@@ -8,18 +8,49 @@ const generateRandomString = () => {
   return randomString;
 };
 
+//checks if an email exists in a given array of user objects.
+const isEmailExist = (email, users) => {
+  for (const user in users) {
+    if (users[user].email === email) {
+      return true;
+    }
+  }
+  return false;
+};
+
 // checks if a user with a specific email exists in a given database object and retrieves the associated user ID
 const getUserByEmail = (email, database) => {
-  for (const userID in database) {
-    const user = database[userID];
-    if (user.email === email) {
-      return userID;
+  for (const user in database) {
+    if (database[user].email === email) {
+      return database[user];
     }
   }
   return null;
 };
-  
+//returns URLs where userID equals id of logged in user and update code
+const urlsForUser = (id, urlDatabase) => {
+  const urls = {};
+  for (const shortURL in urlDatabase) {
+    if (urlDatabase[shortURL].userID === id) {
+      urls[shortURL] = urlDatabase[shortURL];
+    }
+  }
+  return urls;
+};
+
+// to check if a given cookie corresponds to a user stored in the userDatabase object.
+const cookieHasUser = function(cookie, userDatabase) {
+  for (const user in userDatabase) {
+    if (cookie === user) {
+      return true;
+    }
+  } return false;
+};
+
 module.exports = {
   generateRandomString,
-  getUserByEmail
+  isEmailExist,
+  getUserByEmail,
+  urlsForUser,
+  cookieHasUser
 };
