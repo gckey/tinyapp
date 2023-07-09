@@ -20,10 +20,11 @@ This project was created and published by me as part of my learnings at Lighthou
 
 ## Final Product
 
-![A screenshot of my project](assets/TinyApp screenshot_login.jpg "Project Screenshot")
-![A screenshot of my project](assets/TinyApp screenshot_register.jpg "Project Screenshot")
-![A screenshot of my project](assets/TinyApp screenshot_01.jpg "Project Screenshot")
-![A screenshot of my project](assets/TinyApp screenshot_02.jpg "Project Screenshot")
+![A screenshot of my project](assets/TinyAppScreenshot_login.jpg "Project Screenshot")
+![A screenshot of my project](assets/TinyAppScreenshot_register.jpg "Project Screenshot")
+![A screenshot of my project](assets/TinyAppScreenshot_01.jpg "Project Screenshot")
+![A screenshot of my project](assets/TinyAppScreenshot_02.jpg "Project Screenshot")
+
 
 ## Dependencies
 
